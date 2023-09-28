@@ -1,44 +1,41 @@
-import React, { useState } from 'react';
-import styles from '../Styles/home.module.css'
-import { Initialtodos } from './App';
-import { connect } from 'react-redux';
-import { addTodo } from '../Redux/Actions';
+import React, { useState } from "react";
+import styles from "../Styles/home.module.css";
+import { Initialtodos } from "./App";
+import { connect } from "react-redux";
+import { addTodo } from "../Redux/Actions";
 
 const CreateToDo = (props) => {
-    const [toDo,setTodo] = useState('');
-    // const todos = JSON.parse(localStorage.getItem("todos"));
-    const {todos} = props;
-    const handleSubmit = (e)=>{
-      e.preventDefault();
+  const [toDo, setTodo] = useState("");
+  const { todos } = props;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (toDo!="") {
       const newTodo = {
-        completed : false,
-        userId : 1,
-        title : toDo,
-        id : todos?(todos.unticked.length+todos.ticked.length+1):1
+        completed: false,
+        userId: 1,
+        title: toDo,
+        id: todos ? todos.unticked.length + todos.ticked.length + 1 : 1,
       };
-      const newUnticked = [newTodo,...todos.unticked];
+      const newUnticked = [newTodo, ...todos.unticked];
       const newTodos = {
         unticked: newUnticked,
-        ticked: todos.ticked
-      }
-      console.log(newTodos);
-      localStorage.setItem("todos",JSON.stringify(newTodos));
-      props.dispatch(addTodo(newTodos));
-    }
-
-    const handleRemove = (e)=>{
-      e.preventDefault();
-      const newTodos = {
-        ticked: [],
-        ...props.todos
+        ticked: todos.ticked,
       };
+      localStorage.setItem("todos", JSON.stringify(newTodos));
       props.dispatch(addTodo(newTodos));
+      setTodo("");
     }
+  };
 
-    const handleReset = (e)=>{
-      e.preventDefault();
-      props.dispatch(addTodo(Initialtodos));
-    }
+  const handleRemove = (e) => {
+    e.preventDefault();
+    const newTodos = {
+      ticked: [],
+      unticked: props.todos.unticked,
+    };
+    console.log(newTodos);
+    props.dispatch(addTodo(newTodos));
+  };
 
   return (
     <div>
@@ -53,18 +50,23 @@ const CreateToDo = (props) => {
           placeholder="Enter the task..."
         />
         <button type="submit" className={styles.createtodoButton}>
-          Add Post
+          Add
         </button>
-        <button className={styles.createtodoButton} style={{backgroundColor:'red'}} onClick={handleRemove}>Remove Ticked</button>
-        <button onClick={handleReset}><img src="https://img.icons8.com/ios-filled/50/recurring-appointment.png"/></button>
+        <button
+          className={styles.createtodoButton}
+          style={{ backgroundColor: "red" }}
+          onClick={handleRemove}
+        >
+          Delete Ticked
+        </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 const callback = (state) => {
   return {
     ...state,
   };
 };
-export default connect(callback)(CreateToDo)
+export default connect(callback)(CreateToDo);

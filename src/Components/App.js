@@ -12,18 +12,29 @@ export const Initialtodos = {
 
 function App(props) {
   useEffect(() => {
-    // const todos = JSON.parse(localStorage.getItem("todos"));
-    if (JSON.parse(localStorage.getItem("todos"))) {
-      props.dispatch(addTodo(JSON.parse(localStorage.getItem("todos"))));
-    } else {
-      props.dispatch(addTodo(Initialtodos));
-      localStorage.setItem("todos",JSON.stringify(props.todos));
+    if (!localStorage.getItem("todos")) {
+      localStorage.setItem("todos", JSON.stringify(Initialtodos));
     }
-    console.log(props.todos);
+    props.dispatch(addTodo(JSON.parse(localStorage.getItem("todos"))));
   }, []);
+
+  const handleReset = (e)=>{
+    e.preventDefault();
+    props.dispatch(addTodo(Initialtodos));
+  }
+
   return (
     <div className="App">
-      <h1>Todo</h1>
+      <h1 className={styles.navBrand}>
+        <img src="https://img.icons8.com/ios-filled/50/FA5252/reminders.png" />
+        To Do
+      </h1>
+      <button
+        className={`${styles.resetButton} ${styles.createtodoButton}`}
+        onClick={handleReset}
+      >
+        <img src="https://img.icons8.com/ios-filled/50/recurring-appointment.png" />
+      </button>
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>

@@ -1,8 +1,18 @@
-.heading{
-  text-align: center;
+.navBrand{
+  text-align: left;
   font-weight: 800;
   font-size: 2.5rem;
-  color: whitesmoke;
+  color: red;
+  box-shadow: 0px 0px 10px 10px  lightgray;
+  margin: 0;
+  padding: 1rem;
+  background-color: ligh;
+}
+
+.navBrand img{
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 1rem;
 }
 
 .btngroup{
@@ -22,20 +32,33 @@
   height: 20px;
 }
 
+
+
 .todolist{
   list-style: none;
-  margin: 5% 10%;
-  height: 400px;
+  margin: 2.5% 10%;
+  max-height: 350px;
   overflow-y: scroll;
   padding: 0 3%;
 }
 
+.tickedHeading{
+  margin: 0 20rem;
+  font-size: 1.25rem;
+}
+
+.tickedHeading img{
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 1rem;
+}
+
 .todo{
-  width: 90%;
-  background-color: goldenrod;
+  width: 60%;
+  background-color: black;
   color: aliceblue;
-  border-radius: 20px;
-  margin: 0.75rem 0;
+  border-radius: 30px;
+  margin: 0.75rem auto;
   height: 30px;
   padding: 0.75rem;
   display: flex;
@@ -44,7 +67,7 @@
 }
 
 .todo:hover{
-  background-color: rgb(170, 130, 29);
+  box-shadow: 0px 0px 4px 4px lightgray;
 }
 
 /* Create todo styles */
@@ -54,16 +77,18 @@
 .createtodo{
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  margin: 5% 10%;
+  justify-content: center;
+  margin: 4% 10%;
+  align-items: center;
 }
 
 .createtodoInput{
-  width: 60%;
+  width: 30%;
   height: 20%;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 1%;
-  background-color: blanchedalmond;
+  background-color: transparent;
+  border: 1px solid black;
 }
 
 .createtodoButton{
@@ -71,18 +96,32 @@
   background-color: green;
   font-weight: 600;
   color: azure;
-  border-radius: 20px;
-  width: 10%;
+  border-radius: 15px;
+  width: 7.5%;
+  height: 40px;
   font-size: 0.75rem;
   margin: 0 1%;
 }
-
+.resetButton{
+  width: 2.5rem;
+  height: 2.5rem  ;
+  border-radius: 50%;
+  position: absolute;
+  right: 5%;
+  top: 20px;
+  background-color: red;
+}
+.resetButton img{
+  width: 1.5rem;
+  height: 1.5rem;
+}
 .editInput{
   background-color: transparent;
   padding: 1%;
   width: 80%;
-  border: 1px solid black;
-  border-radius: 10px;
+  border: 1px solid white;
+  border-radius: 20px;
+  color: whitesmoke;
 }
 
 .editTodo{
@@ -92,12 +131,28 @@
   justify-content: space-around;
 }
 
-@media screen and (max-width: 1000px) {
-  .todolist{
+.editInput::placeholder{
+  color: aliceblue;
+}
+
+@media screen and (max-width: 850px) {
+  /* .todolist{
     margin: 5%;
   }
   .todo{
     width: 90%;
+  } */
+  .createtodo{
+    margin: 4% 5%;
+  }
+
+  .createtodoButton{
+    width: 15%;
+    font-size: 0.65rem;
+  }
+
+  .createtodoInput{
+    width: 50%;
   }
 }
 
@@ -111,9 +166,6 @@
   }
   .button{
     margin: 0 0.25rem;
-  }
-  .createtodoButton{
-    width: 20%;
   }
   
 }

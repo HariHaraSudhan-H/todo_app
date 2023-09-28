@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import styles from "../Styles/home.module.css"
+import styles from "../Styles/home.module.css";
 import { connect } from "react-redux";
-import { deleteTodo } from "../Redux/Actions";
+import { addTodo, deleteTodo, tickTodo } from "../Redux/Actions";
 
 const Todo = (props) => {
-  const { data, editModeOther, setEditModeOther } = props;
-  const [title, setTitle] = useState(data.title);
-  const [completed, setCompleted] = useState(data.completed);
+  const { todos, dispatch} = props;
+  const { todo ,editModeOther, setEditModeOther } = props;
+  const [title, setTitle] = useState(todo.title);
   const [editMode, setEditMode] = useState(false);
-  const {todos,dispatch} = props;
   // handles deletion of todo's
   const handleDelete = (id) => {
-    const newUnticked = todos.unticked.filter((todo)=>todo.id!=id);
+    const newUnticked = todos.unticked.filter((todo) => todo.id != id);
     const newTodos = {
-      unticked:newUnticked,
-      ...todos
-    }
-    localStorage.setItem("todos",JSON.stringify(newTodos));
+      unticked: newUnticked,
+      ticked: todos.ticked,
+    };
+    console.log(newTodos);
+    localStorage.setItem("todos", JSON.stringify(newTodos));
     dispatch(deleteTodo(newTodos));
   };
 
@@ -25,23 +25,70 @@ const Todo = (props) => {
     setEditMode(true);
     setEditModeOther(true);
   };
-  const handleCompleteClick = (id) => {};
+  const handleCompleteClick = (id, ticked) => {
+    const completedTodo = ticked
+      ? todos.ticked.filter((todo) => todo.id === id)[0]
+      : todos.unticked.filter((todo) => todo.id === id)[0];
+    completedTodo.completed = !completedTodo.completed;
+
+    const newTodos = ticked
+      ? {
+          ticked: todos.ticked.filter((todo) => todo.id !== id),
+          unticked: [completedTodo,...todos.unticked],
+        }
+      : {
+          unticked: todos.unticked.filter((todo) => todo.id !== id),
+          ticked: [...todos.ticked, completedTodo],
+        };
+    localStorage.setItem("todos", JSON.stringify(newTodos));
+    dispatch(tickTodo(newTodos));
+  };
 
   // Handles saving the changes after edit and makes editmode false
-  const handleEditSave = (e, id) => {};
+  const handleEditSave = (e, id) => {
+    e.preventDefault();
+    const newTodos = todos;
+    console.log(newTodos)
+    newTodos.unticked.map((todo)=>{
+      if(todo.id===id){
+        todo.title = title;
+        return;
+      }
+    })
+    dispatch(addTodo(newTodos));
+    localStorage.setItem("todos",JSON.stringify(newTodos));
+    setEditMode(false);
+    setEditModeOther(false);
+  };
 
   // styles to make strikethrough for todos those are done
   const style = {
     todoTitle: {
-      textDecoration: completed ? "line-through black 3px" : "none",
+      textDecoration: todo.completed ? "line-through black 3px" : "none",
     },
   };
 
   return (
     <div className={styles.todo}>
-      {
+      { editMode ? (
+        <form
+          onSubmit={(e) => {
+            handleEditSave(e, todo.id);
+          }}
+          className={styles.editTodo}
+        >
+          <input
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            className={styles.editInput}
+          />
+          <button className={styles.button} style={{backgroundColor:'green',borderRadius:'20px'}}>Save</button>
+        </form>
+      ) : (
         <>
-          <span style={style.todoTitle}>{title}</span>
+          <span style={style.todoTitle}>{todo.title}</span>
           <div className={styles.btngroup}>
             <button className={styles.button}>
               <img
@@ -49,29 +96,29 @@ const Todo = (props) => {
                 alt="delete"
                 className={styles.buttonimages}
                 onClick={() => {
-                  handleDelete(data.id);
+                  handleDelete(todo.id);
                 }}
               />
             </button>
-            <button
+            {!props.ticked&&<button
               className={styles.button}
               disabled={editModeOther}
               onClick={handleEditClick}
             >
               <img
-                src="https://cdn.icon-icons.com/icons2/1558/PNG/512/353430-checkbox-edit-pen-pencil_107516.png"
+                src="https://img.icons8.com/ios-filled/50/FA5252/create-new.png"
                 alt="edit"
                 className={styles.buttonimages}
               />
-            </button>
-            {completed ? (
+            </button>}
+            {todo.completed ? (
               <button className={styles.button}>
                 <img
-                  src="https://cdn.icon-icons.com/icons2/1184/PNG/512/1490134498-checkmark_82222.png"
+                  src="https://img.icons8.com/ios-filled/50/FA5252/checkmark--v1.png"
                   alt="removeComplete"
                   className={styles.buttonimages}
                   onClick={() => {
-                    handleCompleteClick(data.id);
+                    handleCompleteClick(todo.id, props.ticked);
                   }}
                 />
               </button>
@@ -82,14 +129,14 @@ const Todo = (props) => {
                   className={styles.buttonimages}
                   alt="makeComplete"
                   onClick={() => {
-                    handleCompleteClick(data.id);
+                    handleCompleteClick(todo.id);
                   }}
                 />
               </button>
             )}
           </div>
         </>
-      }
+      )}
     </div>
   );
 };
