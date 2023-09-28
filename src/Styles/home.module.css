@@ -41,7 +41,7 @@
 }
 
 .tickedHeading {
-  margin: 0 20rem;
+  margin: 0 30%;
   font-size: 1.25rem;
 }
 
@@ -150,6 +150,10 @@
   .resetButton {
     width: 2.5rem;
     height: 2.5rem;
+  }
+
+  .tickedHeading{
+    margin: 0 10%;
   }
 }
 
