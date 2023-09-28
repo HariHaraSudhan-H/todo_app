@@ -136,12 +136,7 @@
 }
 
 @media screen and (max-width: 850px) {
-  /* .todolist{
-    margin: 5%;
-  }
-  .todo{
-    width: 90%;
-  } */
+  
   .createtodo{
     margin: 4% 5%;
   }
